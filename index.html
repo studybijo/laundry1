@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-STHIRI - Your Modern Laundry Service</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      /* Fix for sticky header covering content */
+      html {
+        scroll-padding-top: 80px; /* Adjust this value if the nav bar height changes */
+      }
+      .text-gradient {
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        background-image: linear-gradient(to right, #6ee7b7, #3b82f6);
+      }
+      .message-box {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 1rem 2rem;
+        border-radius: 9999px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+        z-index: 1000;
+      }
+      .hidden {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-20px) translateX(-50%);
+      }
+      .show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) translateX(-50%);
+      }
+      /* Custom styles for the new pricing cards */
+      .pricing-card {
+        position: relative;
+        overflow: hidden;
+        height: 250px; /* Fixed height for consistent layout */
+      }
+      .pricing-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        text-align: center;
+        transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+      }
+      .pricing-content .icon-wrapper {
+        transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+      }
+      .pricing-content .details {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        text-align: center;
+        transform: translateY(100%);
+        opacity: 0;
+        transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+      }
+      .pricing-card:hover .icon-wrapper {
+        opacity: 0;
+        transform: translateY(-100%);
+      }
+      .pricing-card:hover .details {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      /* Bubble Animation Styles */
+      .bubble-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 0;
+      }
+      .bubble {
+        position: absolute;
+        bottom: -50px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        animation: bubble-flow linear infinite;
+      }
+      @keyframes bubble-flow {
+        0% {
+          transform: translateY(0) scale(0.5);
+          opacity: 0.5;
+        }
+        100% {
+          transform: translateY(-120vh) scale(1.2);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Message Box for Alerts -->
+    <div
+      id="message-box"
+      class="message-box bg-white text-gray-800 hidden"
+    ></div>
+
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-lg p-4 sticky top-0 z-50">
+      <div class="container mx-auto flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <!-- SVG Vintage Iron Box Logo -->
+          <svg
+            width="40"
+            height="40"
+            viewBox="0 0 24 24"
+            class="text-indigo-600 fill-current"
+          >
+            <!-- Main body of the iron -->
+            <polygon points="2 12 12 4 22 12 22 20 2 20 2 12" />
+            <!-- The handle, more literal iron handle -->
+            <path d="M17 11c0-2.76-2.24-5-5-5s-5 2.24-5 5h10z" />
+          </svg>
+          <span class="text-2xl font-bold text-gray-900">E-STHIRI</span>
+        </div>
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex space-x-6 items-center">
+          <a
+            href="#home"
+            class="text-gray-600 hover:text-indigo-600 transition-colors"
+            >Home</a
+          >
+          <a
+            href="#services"
+            class="text-gray-600 hover:text-indigo-600 transition-colors"
+            >Services</a
+          >
+          <a
+            href="#features"
+            class="text-gray-600 hover:text-indigo-600 transition-colors"
+            >Features</a
+          >
+          <a
+            href="#stain-remover"
+            class="text-gray-600 hover:text-indigo-600 transition-colors"
+            >Stain Remover</a
+          >
+          <a
+            href="#pricing"
+            class="text-gray-600 hover:text-indigo-600 transition-colors"
+            >Pricing</a
+          >
+          <a
+            href="#contact"
+            class="bg-indigo-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+            >Book Now</a
+          >
+        </div>
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden flex">
+          <button
+            id="mobile-menu-button"
+            class="text-gray-600 focus:outline-none"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16m-7 6h7"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <!-- Mobile Menu Dropdown -->
+      <div
+        id="mobile-menu"
+        class="hidden md:hidden mt-2 bg-white rounded-lg shadow-md p-4 space-y-2"
+      >
+        <a href="#home" class="block text-gray-600 hover:text-indigo-600"
+          >Home</a
+        >
+        <a href="#services" class="block text-gray-600 hover:text-indigo-600"
+          >Services</a
+        >
+        <a href="#features" class="block text-gray-600 hover:text-indigo-600"
+          >Features</a
+        >
+        <a
+          href="#stain-remover"
+          class="block text-gray-600 hover:text-indigo-600"
+          >Stain Remover</a
+        >
+        <a href="#pricing" class="block text-gray-600 hover:text-indigo-600"
+          >Pricing</a
+        >
+        <a
+          href="#contact"
+          class="block bg-indigo-600 text-white text-center px-4 py-2 rounded-full mt-2"
+          >Book Now</a
+        >
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header
+      id="home"
+      class="bg-indigo-400 text-white min-h-screen flex items-center justify-center p-6 relative overflow-hidden"
+    >
+      <!-- Bubble Animation Container -->
+      <div class="bubble-container"></div>
+      <div class="container mx-auto text-center relative z-10">
+        <h1
+          class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-wide mb-4"
+        >
+          Effortless Laundry, Delivered
+          <span class="text-teal-300">Clean</span>.
+        </h1>
+        <p
+          class="text-lg sm:text-xl md:text-2xl font-light mb-8 max-w-2xl mx-auto"
+        >
+          E-STHIRI provides high-quality laundry and dry cleaning services right
+          to your doorstep. Say goodbye to laundry day!
+        </p>
+        <a
+          href="#contact"
+          class="bg-white text-purple-600 font-bold py-3 px-8 rounded-full shadow-xl transition-transform transform hover:scale-105 hover:bg-gray-200"
+        >
+          Schedule a Pickup
+        </a>
+      </div>
+    </header>
+
+    <!-- About Section (added) -->
+    <section id="about" class="py-16 bg-white">
+      <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center mb-4">About E-STHIRI</h2>
+        <p class="text-xl text-center text-gray-500 mb-8 max-w-3xl mx-auto">
+          E-STHIRI brings professional laundry and dry-cleaning services to your
+          doorstep with care, convenience, and reliability. We use safe cleaning
+          methods, treat each garment individually, and aim to make laundry day
+          effortless for busy households and professionals.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-gray-50 p-6 rounded-2xl shadow-sm text-center">
+            <div
+              class="flex items-center justify-center h-14 w-14 bg-indigo-100 rounded-full mx-auto mb-4"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-7 h-7"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M3 12h18M3 6h18M3 18h18" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Our Mission</h3>
+            <p class="text-gray-600 text-sm">
+              Deliver consistent, high-quality garment care with transparent
+              pricing and easy pickup/dropoff.
+            </p>
+          </div>
+
+          <div class="bg-gray-50 p-6 rounded-2xl shadow-sm text-center">
+            <div
+              class="flex items-center justify-center h-14 w-14 bg-teal-100 rounded-full mx-auto mb-4"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-7 h-7"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 2v6M5 12h14M5 12a7 7 0 0014 0" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Why Choose Us</h3>
+            <p class="text-gray-600 text-sm">
+              Friendly service, careful handling, quick turnarounds and clear
+              communication — every time.
+            </p>
+          </div>
+
+          <div class="bg-gray-50 p-6 rounded-2xl shadow-sm text-center">
+            <div
+              class="flex items-center justify-center h-14 w-14 bg-yellow-100 rounded-full mx-auto mb-4"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-7 h-7"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 2l3 7h7l-5.5 4.5L19 21l-7-4-7 4 1.5-7.5L2 9h7z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Sustainability</h3>
+            <p class="text-gray-600 text-sm">
+              We adopt eco-friendly cleaning options and efficient processes to
+              reduce water and energy use.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-8 text-center">
+          <a
+            href="#contact"
+            class="inline-block bg-indigo-600 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+          >
+            Learn More / Book a Pickup
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-16 bg-white">
+      <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center mb-4">Our Services</h2>
+        <p class="text-xl text-center text-gray-500 mb-12 max-w-3xl mx-auto">
+          We handle your clothes with care and precision, offering a range of
+          services tailored to your needs.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Service 1: Steam Iron -->
+          <div
+            class="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow text-center"
+          >
+            <div
+              class="flex items-center justify-center h-16 w-16 bg-blue-100 text-blue-600 rounded-full mx-auto mb-4"
+            >
+              <svg
+                class="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M14 10a4 4 0 01-4 4H8a2 2 0 00-2 2v2a2 2 0 002 2h8a2 2 0 002-2v-2a2 2 0 00-2-2h-2a2 2 0 01-2-2zM12 10V4m-2 6h4"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Steam Iron</h3>
+            <p class="text-gray-500">Get your clothes steam iron per Kg</p>
+            <a
+              href="#contact"
+              class="mt-4 inline-block bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+              >Book Now</a
+            >
+          </div>
+          <!-- Service 2: Shoes Laundry -->
+          <div
+            class="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow text-center"
+          >
+            <div
+              class="flex items-center justify-center h-16 w-16 bg-teal-100 text-teal-600 rounded-full mx-auto mb-4"
+            >
+              <svg
+                class="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M18 10h-2M10 10h2M4 14h16a2 2 0 002-2V8a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2zm16 4H4v4a2 2 0 002 2h12a2 2 0 002-2v-4z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Shoes Laundry</h3>
+            <p class="text-gray-500">Get your dirty pair of shoes clean</p>
+            <a
+              href="#contact"
+              class="mt-4 inline-block bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+              >Book Now</a
+            >
+          </div>
+          <!-- Service 3: Laundry Per KG -->
+          <div
+            class="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow text-center"
+          >
+            <div
+              class="flex items-center justify-center h-16 w-16 bg-indigo-100 text-indigo-600 rounded-full mx-auto mb-4"
+            >
+              <svg
+                class="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 16a4 4 0 01-4-4v-1a4 4 0 014-4h14a4 4 0 014 4v1a4 4 0 01-4 4H7zM4 16h16M7 16v4m10-4v4"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Laundry Per KG</h3>
+            <p class="text-gray-500">We charge as per weight of your clothes</p>
+            <a
+              href="#contact"
+              class="mt-4 inline-block bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+              >Book Now</a
+            >
+          </div>
+          <!-- Service 4: Express Laundry -->
+          <div
+            class="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow text-center"
+          >
+            <div
+              class="flex items-center justify-center h-16 w-16 bg-yellow-100 text-yellow-600 rounded-full mx-auto mb-4"
+            >
+              <svg
+                class="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Express Laundry</h3>
+            <p class="text-gray-500">
+              Get your clothes Wash & Iron in 24 hours only
+            </p>
+            <a
+              href="#contact"
+              class="mt-4 inline-block bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+              >Book Now</a
+            >
+          </div>
+          <!-- Service 5: Heavy Laundry -->
+          <div
+            class="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow text-center"
+          >
+            <div
+              class="flex items-center justify-center h-16 w-16 bg-gray-100 text-gray-600 rounded-full mx-auto mb-4"
+            >
+              <svg
+                class="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 17a2 2 0 11-4 0 2 2 0 014 0zm0 0v-4a2 2 0 00-2-2h-2a2 2 0 00-2 2v4m4 0h-4M6 21v-8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H8a2 2 0 01-2-2z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Heavy Laundry</h3>
+            <p class="text-gray-500">Carpet, Curtain and Sofa Cleaning</p>
+            <a
+              href="#contact"
+              class="mt-4 inline-block bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+              >Book Now</a
+            >
+          </div>
+          <!-- Service 6: Dry Cleaning -->
+          <div
+            class="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow text-center"
+          >
+            <div
+              class="flex items-center justify-center h-16 w-16 bg-pink-100 text-pink-600 rounded-full mx-auto mb-4"
+            >
+              <svg
+                class="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 11a4 4 0 00-4 4v3a2 2 0 002 2h4a2 2 0 002-2v-3a4 4 0 00-4-4z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Dry Cleaning</h3>
+            <p class="text-gray-500">Clothes dry clean with utmost care</p>
+            <a
+              href="#contact"
+              class="mt-4 inline-block bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+              >Book Now</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stain Remover Section -->
+    <section id="stain-remover" class="py-16 bg-gray-100">
+      <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center mb-4">
+          ✨ Stain Removal Assistant ✨
+        </h2>
+        <p class="text-xl text-center text-gray-500 mb-12 max-w-3xl mx-auto">
+          Not sure how to treat a stain? Describe it below and get instant,
+          professional advice.
+        </p>
+        <div
+          class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-12"
+        >
+          <div class="bg-white p-8 rounded-2xl shadow-xl w-full lg:w-1/2">
+            <div class="space-y-6">
+              <div>
+                <label
+                  for="stain-description"
+                  class="block text-gray-700 font-semibold mb-2"
+                  >Describe your stain:</label
+                >
+                <textarea
+                  id="stain-description"
+                  rows="4"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="e.g., 'red wine on a white cotton shirt'"
+                ></textarea>
+              </div>
+              <button
+                id="get-advice-btn"
+                class="w-full bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+              >
+                Get Stain Advice
+              </button>
+              <div
+                id="loading-indicator"
+                class="hidden text-center text-indigo-600 font-semibold"
+              >
+                <svg
+                  class="animate-spin h-5 w-5 mr-3 inline-block"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Thinking...
+              </div>
+              <div
+                id="stain-advice"
+                class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200"
+              >
+                <h4 class="text-lg font-bold mb-2">Stain Advice:</h4>
+                <p id="advice-text" class="text-gray-600">
+                  Your advice will appear here.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-16 bg-gray-100">
+      <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center mb-2">
+          Our Dry Cleaning & Laundry Prices
+        </h2>
+        <p class="text-xl text-center text-gray-500 mb-12 max-w-3xl mx-auto">
+          We offer competitive rates for your laundry needs, ensuring quality
+          service at an affordable price.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Pricing Card 1: Wash & Press -->
+          <div
+            class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-shadow pricing-card"
+          >
+            <div class="pricing-content">
+              <div class="icon-wrapper">
+                <div
+                  class="flex items-center justify-center h-20 w-20 bg-blue-100 text-blue-600 rounded-full mx-auto mb-4"
+                >
+                  <!-- SVG for Wash & Press -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-12 h-12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M7 16a4 4 0 01-4-4v-1a4 4 0 014-4h14a4 4 0 014 4v1a4 4 0 01-4 4H7zM4 16h16M7 16v4m10-4v4"
+                    />
+                  </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Wash & Press</h3>
+                <p class="text-gray-500">starting from</p>
+              </div>
+              <div class="details">
+                <h3 class="text-xl font-semibold mb-2">Wash & Press</h3>
+                <p class="text-4xl font-extrabold text-indigo-600 mt-4">
+                  ₹80<span class="text-lg font-normal text-gray-500">/Kg</span>
+                </p>
+                <a
+                  href="#contact"
+                  class="mt-4 inline-block bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+                  >Book Now</a
+                >
+              </div>
+            </div>
+          </div>
+          <!-- Pricing Card 2: Dry Cleaning -->
+          <div
+            class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-shadow pricing-card"
+          >
+            <div class="pricing-content">
+              <div class="icon-wrapper">
+                <div
+                  class="flex items-center justify-center h-20 w-20 bg-pink-100 text-pink-600 rounded-full mx-auto mb-4"
+                >
+                  <!-- SVG for Dry Cleaning -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-12 h-12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z"
+                    />
+                    <path
+                      d="M12 11a4 4 0 00-4 4v3a2 2 0 002 2h4a2 2 0 002-2v-3a4 4 0 00-4-4z"
+                    />
+                  </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Dry Cleaning</h3>
+                <p class="text-gray-500">starting from</p>
+              </div>
+              <div class="details">
+                <h3 class="text-xl font-semibold mb-2">Dry Cleaning</h3>
+                <p class="text-4xl font-extrabold text-indigo-600 mt-4">
+                  ₹200<span class="text-lg font-normal text-gray-500"
+                    >/item</span
+                  >
+                </p>
+                <a
+                  href="#contact"
+                  class="mt-4 inline-block bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+                  >Book Now</a
+                >
+              </div>
+            </div>
+          </div>
+          <!-- Pricing Card 3: Express Laundry -->
+          <div
+            class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-shadow pricing-card"
+          >
+            <div class="pricing-content">
+              <div class="icon-wrapper">
+                <div
+                  class="flex items-center justify-center h-20 w-20 bg-teal-100 text-teal-600 rounded-full mx-auto mb-4"
+                >
+                  <!-- SVG for Express Laundry -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-12 h-12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Express Laundry</h3>
+                <p class="text-gray-500">starts from</p>
+              </div>
+              <div class="details">
+                <h3 class="text-xl font-semibold mb-2">Express Laundry</h3>
+                <p class="text-4xl font-extrabold text-indigo-600 mt-4">
+                  ₹150<span class="text-lg font-normal text-gray-500">/Kg</span>
+                </p>
+                <a
+                  href="#contact"
+                  class="mt-4 inline-block bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+                  >Book Now</a
+                >
+              </div>
+            </div>
+          </div>
+          <!-- Pricing Card 4: Carpet Cleaning -->
+          <div
+            class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-shadow pricing-card"
+          >
+            <div class="pricing-content">
+              <div class="icon-wrapper">
+                <div
+                  class="flex items-center justify-center h-20 w-20 bg-orange-100 text-orange-600 rounded-full mx-auto mb-4"
+                >
+                  <!-- SVG for Carpet Cleaning -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-12 h-12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M18 19V7a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v12m12 0H6"
+                    />
+                    <path d="M12 12v7m9-7v7m-18 0v-7" />
+                  </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Carpet Cleaning</h3>
+                <p class="text-gray-500">starting from</p>
+              </div>
+              <div class="details">
+                <h3 class="text-xl font-semibold mb-2">Carpet Cleaning</h3>
+                <p class="text-4xl font-extrabold text-indigo-600 mt-4">
+                  ₹400<span class="text-lg font-normal text-gray-500"
+                    >/piece</span
+                  >
+                </p>
+                <a
+                  href="#contact"
+                  class="mt-4 inline-block bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+                  >Book Now</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-white">
+      <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center mb-4">Get in Touch</h2>
+        <p class="text-xl text-center text-gray-500 mb-12 max-w-2xl mx-auto">
+          Ready to transform your laundry experience? Schedule a pickup or ask
+          us a question.
+        </p>
+        <!-- <div
+          class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-12"
+        >
+          <div
+            class="bg-gray-100 p-8 rounded-2xl shadow-xl w-full md:w-1/2 lg:w-1/3"
+          >
+            <form class="space-y-6">
+              <div>
+                <label for="name" class="block text-gray-700 font-semibold mb-2"
+                  >Your Name</label
+                >
+                <input
+                  type="text"
+                  id="name"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+              <div>
+                <label
+                  for="email"
+                  class="block text-gray-700 font-semibold mb-2"
+                  >Your Email</label
+                >
+                <input
+                  type="email"
+                  id="email"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+              <div>
+                <label
+                  for="message"
+                  class="block text-gray-700 font-semibold mb-2"
+                  >Your Message</label
+                >
+                <textarea
+                  id="message"
+                  rows="4"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+              >
+                Send Message
+              </button>
+            </form>
+          </div>
+        </div> -->
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-8 relative">
+          <button
+            class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold"
+          >
+            &times;
+          </button>
+          <h2 class="text-3xl font-bold text-center mb-8">Schedule a Pickup</h2>
+
+          <div class="grid grid-cols-1 gap-6">
+            <div>
+              <label
+                for="your-name"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Your Name *</label
+              >
+              <input
+                type="text"
+                id="your-name"
+                class="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                placeholder="Your Name *"
+              />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label
+                  for="your-mobile"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Your mobile number *</label
+                >
+                <input
+                  type="text"
+                  id="your-mobile"
+                  class="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  placeholder="Your mobile number *"
+                />
+              </div>
+              <div>
+                <label
+                  for="your-email"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Your e-mail address</label
+                >
+                <input
+                  type="email"
+                  id="your-email"
+                  class="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  placeholder="Your e-mail address"
+                />
+              </div>
+            </div>
+
+            <div class="flex items-center">
+              <input
+                type="checkbox"
+                id="whatsapp-enabled"
+                class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded mr-2"
+              />
+              <label for="whatsapp-enabled" class="text-sm text-gray-700"
+                >Whatsapp is enabled on this number.</label
+              >
+            </div>
+
+            <div>
+              <label
+                for="address"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Address *</label
+              >
+              <input
+                type="text"
+                id="address"
+                class="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                placeholder="Address *"
+              />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label
+                  for="select-service"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Select Service</label
+                >
+                <div class="relative">
+                  <select
+                    id="select-service"
+                    class="w-full border border-gray-300 rounded-md p-3 appearance-none focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent pr-8"
+                  >
+                    <option value="">Select Service</option>
+                    <option value="dry-cleaning">Dry Cleaning</option>
+                    <option value="laundry">Laundry</option>
+                    <option value="ironing">Ironing</option>
+                  </select>
+                  <div
+                    class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none"
+                  >
+                    <svg
+                      class="w-4 h-4 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 9l-7 7-7-7"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label
+                  for="number-of-items"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Number of Clothes / Articles</label
+                >
+                <input
+                  type="number"
+                  id="number-of-items"
+                  class="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  placeholder="Number of Clothes / Articles"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                for="pickup-date"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Date</label
+              >
+              <div class="relative">
+                <input
+                  type="text"
+                  id="pickup-date"
+                  class="w-full border border-gray-300 rounded-md p-3 pl-10 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  placeholder="dd-mm-yyyy"
+                />
+                <div
+                  class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                >
+                  <svg
+                    class="w-5 h-5 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M4 21h16a2 2 0 002-2V8a2 2 0 00-2-2H4a2 2 0 00-2 2v11a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label
+                for="your-message"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Your message</label
+              >
+              <textarea
+                id="your-message"
+                rows="4"
+                class="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                placeholder="Your message"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="mt-8 text-center">
+            <button
+              class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg w-full sm:w-auto transition duration-300"
+            >
+              Book Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12">
+      <div class="container mx-auto px-6 text-center">
+        <div class="flex flex-col items-center space-y-4">
+          <div class="flex items-center space-x-2 mb-4">
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              class="text-indigo-400 fill-current"
+            >
+              <!-- Main body of the iron -->
+              <polygon points="2 12 12 4 22 12 22 20 2 20 2 12" />
+              <!-- The handle, more literal iron handle -->
+              <path d="M17 11c0-2.76-2.24-5-5-5s-5 2.24-5 5h10z" />
+            </svg>
+            <span class="text-xl font-bold">E-STHIRI</span>
+          </div>
+          <p>&copy; 2024 E-STHIRI. All rights reserved.</p>
+          <div class="flex space-x-4 mt-4">
+            <a href="#" class="hover:text-white transition-colors">Facebook</a>
+            <a href="#" class="hover:text-white transition-colors">Twitter</a>
+            <a href="#" class="hover:text-white transition-colors">Instagram</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu & Gemini API -->
+    <script>
+      // Mobile Menu Toggler
+      document
+        .getElementById("mobile-menu-button")
+        .addEventListener("click", function () {
+          var mobileMenu = document.getElementById("mobile-menu");
+          if (mobileMenu.classList.contains("hidden")) {
+            mobileMenu.classList.remove("hidden");
+          } else {
+            mobileMenu.classList.add("hidden");
+          }
+        });
+      document.querySelectorAll("#mobile-menu a").forEach((item) => {
+        item.addEventListener("click", () => {
+          document.getElementById("mobile-menu").classList.add("hidden");
+        });
+      });
+
+      // Gemini API Logic
+      document
+        .getElementById("get-advice-btn")
+        .addEventListener("click", async () => {
+          const stainDescription = document
+            .getElementById("stain-description")
+            .value.trim();
+          const adviceText = document.getElementById("advice-text");
+          const loadingIndicator = document.getElementById("loading-indicator");
+
+          if (stainDescription === "") {
+            showMessage(
+              "Please describe your stain first.",
+              "bg-red-500 text-white"
+            );
+            return;
+          }
+
+          adviceText.textContent = "";
+          loadingIndicator.classList.remove("hidden");
+
+          const apiKey = "";
+          const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+          const userQuery = `Act as a professional laundry and dry cleaning expert. A customer has a stain and wants to know how to pre-treat it before bringing it in. Give a clear, step-by-step guide for removing the following stain: '${stainDescription}'. Keep the advice concise and easy to follow. Do not mention any specific product names, just types of products (e.g., 'oxygen-based bleach').`;
+
+          const payload = {
+            contents: [{ parts: [{ text: userQuery }] }],
+            tools: [{ google_search: {} }],
+          };
+
+          try {
+            let response = await fetch(apiUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+
+            // Exponential backoff logic for retries
+            const maxRetries = 3;
+            let retries = 0;
+            while (response.status === 429 && retries < maxRetries) {
+              const delay = Math.pow(2, retries) * 1000;
+              await new Promise((res) => setTimeout(res, delay));
+              response = await fetch(apiUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+              });
+              retries++;
+            }
+
+            if (!response.ok) {
+              throw new Error(`API error: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            const text =
+              result?.candidates?.[0]?.content?.parts?.[0]?.text ||
+              "Sorry, I couldn't get advice right now. Please try again later.";
+
+            adviceText.textContent = text;
+          } catch (error) {
+            console.error("Error fetching stain advice:", error);
+            adviceText.textContent =
+              "There was an error getting the advice. Please check your network connection and try again.";
+            showMessage(
+              "Failed to get advice. Please try again.",
+              "bg-red-500 text-white"
+            );
+          } finally {
+            loadingIndicator.classList.add("hidden");
+          }
+        });
+
+      function showMessage(message, styleClass) {
+        const messageBox = document.getElementById("message-box");
+        messageBox.textContent = message;
+        messageBox.className = `message-box ${styleClass} show`;
+
+        setTimeout(() => {
+          messageBox.classList.remove("show");
+          messageBox.classList.add("hidden");
+        }, 3000);
+      }
+
+      // Bubble Generation Logic
+      function createBubble() {
+        const container = document.querySelector(".bubble-container");
+        if (!container) return;
+
+        const bubble = document.createElement("div");
+        bubble.classList.add("bubble");
+
+        const size = Math.random() * 20 + 10; // Bubbles from 10px to 30px
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+
+        const startPosition = Math.random() * 100; // Start at random horizontal position
+        bubble.style.left = `${startPosition}vw`;
+
+        // Randomize animation duration for a natural look
+        const duration = Math.random() * 10 + 5; // 5 to 15 seconds
+        bubble.style.animationDuration = `${duration}s`;
+
+        container.appendChild(bubble);
+
+        // Remove bubble after animation completes to avoid cluttering the DOM
+        bubble.addEventListener("animationend", () => {
+          bubble.remove();
+        });
+      }
+
+      // Generate a new bubble every 0.5 seconds
+      setInterval(createBubble, 500);
+    </script>
+  </body>
+</html>
