@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-STHIRI — Laundry Hero Animation</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Tailwind config for custom colors, shadows, and animations
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: '#fff1f2',
+                100: '#ffe4e6',
+                200: '#fecdd3',
+                300: '#fda4af',
+                400: '#fb7185',
+                500: '#f43f5e', // base
+                600: '#e11d48',
+                700: '#be123c',
+                800: '#9f1239',
+                900: '#881337'
+              }
+            },
+            boxShadow: {
+              // Merged both shadow styles
+              glow: '0 0 0 6px rgba(244,63,94,0.15)', 
+            },
+            keyframes: {
+              // Added animations from the first file
+              float: {
+                '0%, 100%': { transform: 'translateY(0px)' },
+                '50%': { transform: 'translateY(-12px)' }
+              },
+              sway: {
+                '0%,100%': { transform: 'rotate(-3deg)' },
+                '50%': { transform: 'rotate(3deg)' }
+              },
+              shimmer: {
+                '0%': { backgroundPosition: '0% 50%' },
+                '100%': { backgroundPosition: '200% 50%' }
+              },
+              scrollFade: {
+                '0%': { opacity: 0, transform: 'translateY(12px)' },
+                '100%': { opacity: 1, transform: 'translateY(0)' }
+              },
+              wave: {
+                '0%': { transform: 'translateX(0)' },
+                '100%': { transform: 'translateX(-50%)' }
+              },
+              // Kept/Adapted 'cardUp' and 'fadeIn' if you plan to use them elsewhere, 
+              // but scrollFade handles the scroll-reveal effect
+            },
+            animation: {
+              // Added animations from the first file
+              float: 'float 4s ease-in-out infinite',
+              floatSlow: 'float 6s ease-in-out infinite',
+              sway: 'sway 3.5s ease-in-out infinite',
+              shimmer: 'shimmer 2.5s linear infinite',
+              scrollFade: 'scrollFade 700ms ease-out forwards',
+              wave: 'wave 16s linear infinite',
+              // Kept animations from the second file for consistency
+              fadeIn: 'fadeIn .6s ease-out both',
+              cardUp: 'cardUp .7s cubic-bezier(.22,.61,.36,1) both',
+            }
+          }
+        }
+      }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <style>
+      /* Base styles from second file */
+      :root { --ring: 255 241 242; }
+      html { scroll-padding-top: 80px; }
+      body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif; }
+      .focus-ring:focus { outline: none; box-shadow: 0 0 0 3px rgba(244,63,94,.35); }
+      
+      /* Styles from first file */
+      /* gradient text shimmer */
+      .text-shimmer {
+        background-image: linear-gradient(90deg, #fff, rgba(255,255,255,0.5), #fff);
+        background-size: 200% 100%;
+        -webkit-background-clip: text; background-clip: text; color: transparent;
+        animation: shimmer 2.5s linear infinite;
+      }
+      /* subtle noise overlay */
+      .noise { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter><rect width="120" height="120" filter="url(%23n)" opacity="0.05"/></svg>'); }
+      /* respect reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        * { animation: none !important; transition: none !important; }
+      }
+      
+      /* Staggered grid reveal from second file (optional, but kept for other sections) */
+      @keyframes cardUp { from { opacity: 0; transform: translateY(12px) scale(.98) } to { opacity: 1; transform: translateY(0) scale(1) } }
+      .reveal-grid > * { opacity: 0; animation: cardUp .7s cubic-bezier(.22,.61,.36,1) both }
+      .reveal-grid > *:nth-child(1) { animation-delay: .00s }
+      .reveal-grid > *:nth-child(2) { animation-delay: .08s }
+      .reveal-grid > *:nth-child(3) { animation-delay: .16s }
+      .reveal-grid > *:nth-child(4) { animation-delay: .24s }
+      .reveal-grid > *:nth-child(5) { animation-delay: .32s }
+      .reveal-grid > *:nth-child(6) { animation-delay: .40s }
+    </style>
+  </head>
+
+  <body class="bg-brand-50 text-slate-800 antialiased">
+    <header class="sticky top-0 z-50 border-b border-white/60 bg-white/80 backdrop-blur">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex h-16 items-center justify-between">
+<a href="#" class="flex items-center gap-3 focus-ring">
+  <!-- Desktop logo -->
+  <img 
+    src="assets/weblogo.png" 
+    alt="e-sthiri — NextGen Ironing Hub" 
+    class="hidden md:block h-10 w-20 object-contain"
+  />
+
+  <!-- Mobile icon (optional smaller version for compact navs) -->
+  <img 
+    src="assets/logo-icon.png"   
+    alt="e-sthiri" 
+    class="md:hidden h-10 w-10 object-cover rounded"
+  />
+</a>
+
+
+
+
+          <nav class="hidden md:flex items-center gap-8 text-sm">
+            <a class="hover:text-brand-700 focus-ring" href="#services">Services</a>
+            <a class="hover:text-brand-700 focus-ring" href="#pricing">Pricing</a>
+            <a class="hover:text-brand-700 focus-ring" href="#why">Why Us</a>
+            <a class="hover:text-brand-700 focus-ring" href="#contact">Contact</a>
+          </nav>
+
+          <div class="hidden md:flex items-center gap-3">
+            <a href="#pricing" class="rounded-xl border border-brand-200 px-4 py-2 text-sm font-medium text-brand-700 hover:bg-brand-50 focus-ring">Sign in</a>
+            <a href="#contact" class="rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-700 focus-ring shadow-glow">Book Pickup</a>
+          </div>
+
+          <button id="menuBtn" class="md:hidden rounded-xl p-2 focus-ring" aria-label="Open menu">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div id="mobileMenu" class="md:hidden hidden border-t border-slate-200 bg-white">
+        <div class="mx-auto max-w-7xl px-4 py-4 space-y-2">
+          <a class="block rounded-lg px-3 py-2 hover:bg-brand-50 focus-ring" href="#services">Services</a>
+          <a class="block rounded-lg px-3 py-2 hover:bg-brand-50 focus-ring" href="#pricing">Pricing</a>
+          <a class="block rounded-lg px-3 py-2 hover:bg-brand-50 focus-ring" href="#why">Why Us</a>
+          <a class="block rounded-lg px-3 py-2 hover:bg-brand-50 focus-ring" href="#contact">Contact</a>
+          <div class="flex gap-2 pt-2">
+            <a href="#pricing" class="flex-1 rounded-xl border border-brand-200 px-4 py-2 text-center text-sm font-medium text-brand-700 hover:bg-brand-50 focus-ring">Sign in</a>
+            <a href="#contact" class="flex-1 rounded-xl bg-brand-600 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-brand-700 focus-ring">Book Pickup</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+    <section class="relative overflow-hidden">
+      <div class="absolute inset-0 -z-10">
+        <div class="absolute inset-x-0 top-0 h-[520px] bg-gradient-to-b from-brand-600 via-brand-500 to-brand-400"></div>
+        <div class="absolute bottom-0 left-0 right-0 h-40 opacity-60">
+          <div class="absolute inset-x-0 bottom-0 h-full [mask-image:linear-gradient(to_top,black,transparent)]">
+            <div class="relative h-full w-[200%] animate-wave">
+              <svg class="absolute inset-0 h-full w-1/2" viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill="white" d="M0,64L48,53.3C96,43,192,21,288,37.3C384,53,480,107,576,117.3C672,128,768,96,864,69.3C960,43,1056,21,1152,16C1248,11,1344,21,1392,26.7L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"/>
+              </svg>
+              <svg class="absolute left-1/2 inset-y-0 h-full w-1/2" viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill="white" d="M0,64L48,53.3C96,43,192,21,288,37.3C384,53,480,107,576,117.3C672,128,768,96,864,69.3C960,43,1056,21,1152,16C1248,11,1344,21,1392,26.7L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="grid md:grid-cols-2 gap-10 items-center pt-16 md:pt-24 pb-16">
+          <div class="text-white">
+            <div class="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-sm mb-4 backdrop-blur">
+              <span class="h-2 w-2 rounded-full bg-emerald-300 animate-pulse"></span>
+              <span>Pickup in 60–120 minutes*</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-black leading-tight">
+              Laundry, <span class="text-shimmer">on autopilot</span>.
+            </h1>
+            <p class="mt-4 text-white/90 text-lg md:text-xl max-w-prose">
+              Doorstep pickup, premium wash & ironing, real‑time tracking, and lightning‑fast turnaround. E‑STHIRI keeps your wardrobe always ready.
+            </p>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a href="#contact" class="rounded-xl bg-white text-brand-700 font-semibold px-5 py-3 hover:shadow-glow focus-ring">Book Pickup</a>
+              <a href="#pricing" class="rounded-xl border border-white/60 text-white font-semibold px-5 py-3 hover:bg-white/10 focus-ring">See Pricing</a>
+            </div>
+            <p class="mt-3 text-xs text-white/70">*Fast‑track available in select areas.</p>
+          </div>
+
+          <div class="relative">
+            <div class="pointer-events-none absolute -top-6 -left-6 h-24 w-24 rounded-full bg-white/20 blur-2xl animate-float"></div>
+            <div class="pointer-events-none absolute -bottom-8 -right-4 h-28 w-28 rounded-full bg-white/20 blur-2xl animate-floatSlow"></div>
+
+            <div class="relative rounded-3xl bg-white shadow-2xl ring-1 ring-black/5 p-5">
+              <div class="grid grid-cols-5 gap-4">
+                <div class="col-span-3">
+                  <div class="aspect-[4/3] rounded-2xl bg-gradient-to-br from-brand-100 to-white flex items-center justify-center">
+                    <svg class="w-40 h-40" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="20" y="20" width="160" height="160" rx="20" fill="#fda4af"/>
+                      <circle cx="100" cy="110" r="48" fill="white"/>
+                      <circle cx="100" cy="110" r="34" fill="#fecdd3"/>
+                      <path d="M66 58h68" stroke="white" stroke-width="10" stroke-linecap="round"/>
+                      <circle cx="75" cy="45" r="6" fill="white"/>
+                      <circle cx="95" cy="45" r="6" fill="white"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="col-span-2 flex flex-col gap-4">
+                  <div class="rounded-2xl border border-slate-200 p-4">
+                    <div class="relative h-24">
+                      <div class="absolute inset-x-0 top-4 h-0.5 bg-slate-200"></div>
+                      <div class="absolute left-6 top-4 origin-top animate-sway">
+                        <svg class="h-16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M16 8h32v34H16z" fill="#fda4af"/>
+                          <path d="M16 14h32" stroke="#fff" stroke-width="4"/>
+                        </svg>
+                      </div>
+                      <div class="absolute left-28 top-4 origin-top animate-sway [animation-delay:300ms]">
+                        <svg class="h-16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 12h40v28H12z" fill="#fecdd3"/>
+                          <path d="M12 18h40" stroke="#fff" stroke-width="4"/>
+                        </svg>
+                      </div>
+                      <div class="absolute left-48 top-4 origin-top animate-sway [animation-delay:600ms]">
+                        <svg class="h-16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <circle cx="32" cy="28" r="16" fill="#fb7185"/>
+                          <path d="M16 18h32" stroke="#fff" stroke-width="4"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="rounded-2xl bg-gradient-to-br from-brand-600 to-brand-500 text-white p-4">
+                    <div class="flex items-center gap-3">
+                      <span class="h-2.5 w-2.5 rounded-full bg-emerald-300 animate-pulse"></span>
+                      <div>
+                        <p class="text-sm/5 font-semibold">Order #ES9876</p>
+                        <p class="text-xs/5 text-white/80">Washed • Ironing in progress…</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-5 flex items-center justify-between text-xs text-slate-500">
+                <div class="flex items-center gap-3">
+                  <span class="inline-flex h-6 w-6 items-center justify-center rounded-lg bg-brand-100">🚚</span>
+                  <span>Free pickup & delivery</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="inline-flex h-6 w-6 items-center justify-center rounded-lg bg-brand-100">⏱️</span>
+                  <span>24–48h turnaround</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="inline-flex h-6 w-6 items-center justify-center rounded-lg bg-brand-100">⭐</span>
+                  <span>4.9/5 customer rating</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="noise pointer-events-none absolute inset-0 -z-10"></div>
+    </section>
+
+
+    <!-- Features -->
+    <section id="why" class="relative py-20 sm:py-28 bg-gradient-to-b from-white to-brand-50">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 h-40 w-40 rounded-full bg-brand-200 opacity-30 blur-3xl"></div>
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
+        <div class="mx-auto max-w-3xl text-center">
+          <h2 class="text-4xl font-extrabold tracking-tight sm:text-5xl bg-gradient-to-r from-brand-600 to-brand-400 bg-clip-text text-transparent">Why choose e-sthiri?</h2>
+          <p class="mt-4 text-slate-600">We redefine ironing with quality, convenience, and trust.</p>
+        </div>
+
+        <div class="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 reveal-grid">
+          <div class="group rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-100 text-brand-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <h3 class="mt-5 text-lg font-semibold">Consistency & Quality</h3>
+            <p class="mt-2 italic text-slate-600">“Every garment deserves a perfect press.”</p>
+            <ul class="mt-3 list-disc pl-5 text-slate-700 space-y-1 text-sm">
+              <li>Uniform quality every time.</li>
+              <li>Fabric‑friendly steam pressing.</li>
+              <li>High standards with each order.</li>
+            </ul>
+          </div>
+
+          <div class="group rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-100 text-brand-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/></svg>
+            </div>
+            <h3 class="mt-5 text-lg font-semibold">Customer Convenience</h3>
+            <p class="mt-2 italic text-slate-600">“Your time matters — we take care of the rest.”</p>
+            <ul class="mt-3 list-disc pl-5 text-slate-700 space-y-1 text-sm">
+              <li>Doorstep pickup & delivery.</li>
+              <li>Flexible subscription plans.</li>
+              <li>Easy booking (WhatsApp/App/Call).</li>
+            </ul>
+          </div>
+
+          <div class="group rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-100 text-brand-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 1.567-3 3.5S10.343 15 12 15s3-1.567 3-3.5S13.657 8 12 8z"/></svg>
+            </div>
+            <h3 class="mt-5 text-lg font-semibold">Respect for Clothing</h3>
+            <p class="mt-2 italic text-slate-600">“We handle your clothes like our own.”</p>
+            <ul class="mt-3 list-disc pl-5 text-slate-700 space-y-1 text-sm">
+              <li>Special care for delicate fabrics.</li>
+              <li>Eco‑friendly ironing process.</li>
+              <li>Neat packaging for freshness.</li>
+            </ul>
+          </div>
+
+          <div class="group rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-100 text-brand-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+            </div>
+            <h3 class="mt-5 text-lg font-semibold">Trust & Reliability</h3>
+            <p class="mt-2 italic text-slate-600">“On time, every time.”</p>
+            <ul class="mt-3 list-disc pl-5 text-slate-700 space-y-1 text-sm">
+              <li>Transparent pricing, no hidden charges.</li>
+              <li>On‑time delivery promise.</li>
+              <li>Professional staff & clear communication.</li>
+            </ul>
+          </div>
+
+          <div class="group rounded-3xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-100 text-brand-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h10M7 16h10"/></svg>
+            </div>
+            <h3 class="mt-5 text-lg font-semibold">Innovation & Modernization</h3>
+            <p class="mt-2 italic text-slate-600">“Ironing, reinvented.”</p>
+            <ul class="mt-3 list-disc pl-5 text-slate-700 space-y-1 text-sm">
+              <li>Technology‑enabled service.</li>
+              <li>Modern equipment for efficiency.</li>
+              <li>Improvement from feedback.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mt-14 flex justify-center">
+          <a href="#contact" class="rounded-2xl bg-brand-600 px-8 py-3 text-base font-semibold text-white shadow-md hover:bg-brand-700 focus-ring">Book your pickup</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="border-y border-slate-200 bg-white/70 py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center">
+          <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Our Pricing Plans</h2>
+          <p class="mt-3 text-slate-600">Transparent rates for every need — from casual users to families.</p>
+        </div>
+
+        <div class="mt-10 grid gap-6 lg:grid-cols-3">
+          <!-- Per Item -->
+          <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h3 class="text-lg font-semibold">Per Item</h3>
+            <p class="mt-1 text-sm text-slate-600">Pay as you go</p>
+            <p class="mt-6 text-4xl font-extrabold">₹15<span class="text-base font-semibold text-slate-500">/shirt</span></p>
+            <ul class="mt-6 space-y-2 text-sm">
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Steam pressed neatly</li>
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Doorstep delivery</li>
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Same-day option</li>
+            </ul>
+            <a href="#contact" class="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-medium hover:bg-white focus-ring">Book Now</a>
+          </div>
+
+          <!-- Subscription -->
+          <div class="relative rounded-2xl border-2 border-brand-600 bg-white p-6 shadow-lg">
+            <span class="absolute -top-3 right-6 rounded-full bg-brand-600 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">Popular</span>
+            <h3 class="text-lg font-semibold">Monthly Subscription</h3>
+            <p class="mt-1 text-sm text-slate-600">For regular households</p>
+            <p class="mt-6 text-4xl font-extrabold">₹999<span class="text-base font-semibold text-slate-500">/month</span></p>
+            <ul class="mt-6 space-y-2 text-sm">
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-brand-600"></span> Up to 80 clothes / month</li>
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-brand-600"></span> Priority pickup & delivery</li>
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-brand-600"></span> Free packaging</li>
+            </ul>
+            <a href="#contact" class="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700 focus-ring">Subscribe</a>
+          </div>
+
+          <!-- Family Plan -->
+          <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h3 class="text-lg font-semibold">Family Plan</h3>
+            <p class="mt-1 text-sm text-slate-600">Ideal for families & hostels</p>
+            <p class="mt-6 text-4xl font-extrabold">₹2,499<span class="text-base font-semibold text-slate-500">/month</span></p>
+            <ul class="mt-6 space-y-2 text-sm">
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Unlimited clothes</li>
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Dedicated delivery slots</li>
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> 24/7 support</li>
+            </ul>
+            <a href="#contact" class="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-medium hover:bg-white focus-ring">Join Plan</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="py-16 sm:py-24 bg-white">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center">
+          <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Our Services</h2>
+          <p class="mt-3 text-slate-600">Per‑item ironing rates for common garments.</p>
+        </div>
+
+        <div class="mt-12 overflow-x-auto">
+          <table class="min-w-full border border-slate-200 text-sm text-left rounded-2xl shadow-sm overflow-hidden animate-fadeIn">
+            <thead class="bg-gradient-to-r from-brand-700 to-brand-500 text-white">
+              <tr>
+                <th class="px-4 py-3">Garment</th>
+                <th class="px-4 py-3">Rate</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 [&>tr:hover]:bg-brand-50 [&>tr:hover]:transition-colors">
+              <tr>
+                <td class="px-4 py-3 flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-brand-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M20 12H4'/></svg>Shirt / T‑Shirt</td>
+                <td class="px-4 py-3">₹15</td>
+              </tr>
+              <tr class="bg-brand-50">
+                <td class="px-4 py-3 flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-brand-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 7h18M3 12h18M3 17h18'/></svg>Pants / Jeans</td>
+                <td class="px-4 py-3">₹20</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-brand-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8c-1.657 0-3 1.567-3 3.5S10.343 15 12 15s3-1.567 3-3.5S13.657 8 12 8z'/></svg>Saree (Silk / Cotton)</td>
+                <td class="px-4 py-3">₹30</td>
+              </tr>
+              <tr class="bg-brand-50">
+                <td class="px-4 py-3 flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-brand-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M7 8h10M7 12h10M7 16h10'/></svg>Bedsheet (Single)</td>
+                <td class="px-4 py-3">₹25</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-brand-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7'/></svg>Bedsheet (Double)</td>
+                <td class="px-4 py-3">₹40</td>
+              </tr>
+              <tr class="bg-brand-50">
+                <td class="px-4 py-3 flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-brand-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 7h18'/></svg>Curtains</td>
+                <td class="px-4 py-3">₹35</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-8 text-center">
+          <a href="#contact" class="rounded-2xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-brand-700 focus-ring">Book your pickup</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center">
+          <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Frequently asked questions</h2>
+          <p class="mt-3 text-slate-600">Everything you want to know, answered simply.</p>
+        </div>
+
+        <div class="mx-auto mt-10 max-w-3xl divide-y divide-slate-200 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+          <details class="group p-6">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4">
+              <h3 class="text-base font-semibold">Can I customize the colors?</h3>
+              <span class="transition group-open:rotate-180">⌄</span>
+            </summary>
+            <p class="mt-3 text-sm text-slate-600">Yes. Update the <code class="rounded bg-slate-100 px-1 py-0.5">tailwind.config</code> in the &lt;head&gt; or your build setup.</p>
+          </details>
+          <details class="group p-6">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4">
+              <h3 class="text-base font-semibold">Is this production ready?</h3>
+              <span class="transition group-open:rotate-180">⌄</span>
+            </summary>
+            <p class="mt-3 text-sm text-slate-600">The markup is accessible and responsive. Add your content and deploy.</p>
+          </details>
+          <details class="group p-6">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4">
+              <h3 class="text-base font-semibold">Can I use this commercially?</h3>
+              <span class="transition group-open:rotate-180">⌄</span>
+            </summary>
+            <p class="mt-3 text-sm text-slate-600">Absolutely. Replace the brand and ship it as part of your project.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="cta" class="py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="relative overflow-hidden rounded-3xl border border-brand-200 bg-gradient-to-r from-brand-600 to-brand-500 p-8 sm:p-10">
+          <div class="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl"></div>
+          <div class="absolute -left-6 -bottom-6 h-40 w-40 rounded-full bg-white/10 blur-2xl"></div>
+          <div class="relative grid gap-8 sm:grid-cols-2 sm:items-center">
+            <div>
+              <h2 class="text-3xl font-extrabold text-white">Ready to turn up the heat?</h2>
+              <p class="mt-2 max-w-lg text-brand-50">Bring your product to life with a crisp red aesthetic that stands out.</p>
+            </div>
+            <form class="grid gap-3 sm:grid-cols-[1fr_auto]">
+              <label for="email" class="sr-only">Email</label>
+              <input id="email" type="email" required placeholder="Enter your email" class="w-full rounded-xl border-0 bg-white/95 px-4 py-3 text-slate-800 placeholder-slate-500 shadow-sm ring-1 ring-inset ring-white/30 focus:ring-2 focus:ring-white/70" />
+              <button class="rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow hover:bg-slate-800 focus-ring">Notify me</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="grid gap-10 lg:grid-cols-2">
+          <div>
+            <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Contact us</h2>
+            <p class="mt-3 text-slate-600">We usually reply within one business day.</p>
+
+            <form class="mt-6 grid gap-4">
+              <div class="grid gap-2">
+                <label for="name" class="text-sm font-medium">Name</label>
+                <input id="name" type="text" class="focus-ring rounded-xl border border-slate-300 px-4 py-2.5" placeholder="Your name" />
+              </div>
+              <div class="grid gap-2">
+                <label for="email-2" class="text-sm font-medium">Email</label>
+                <input id="email-2" type="email" class="focus-ring rounded-xl border border-slate-300 px-4 py-2.5" placeholder="you@example.com" />
+              </div>
+              <div class="grid gap-2">
+                <label for="msg" class="text-sm font-medium">Message</label>
+                <textarea id="msg" rows="4" class="focus-ring rounded-xl border border-slate-300 px-4 py-2.5" placeholder="How can we help?" ></textarea>
+              </div>
+              <button class="rounded-xl bg-brand-600 px-5 py-3 text-sm font-semibold text-white hover:bg-brand-700 focus-ring w-max">Send message</button>
+            </form>
+          </div>
+
+          <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h3 class="text-lg font-semibold">Our Office</h3>
+            <ul class="mt-4 space-y-2 text-sm text-slate-700">
+              <li><strong>Name:</strong> E-STHIRI</li>
+              <li><strong>Email:</strong> esthiri.info@gmail.com</li>
+              <li><strong>Address:</strong><br/>
+                ROOM NO : 36/4953/7 (G-FLOOR)<br/>
+                AADITHYA ARCADE<br/>
+                KUNNTHMANA LANE<br/>
+                SHORNUR ROAD<br/>
+                THRISSUR - 680001
+              </li>
+              <li><strong>Phone:</strong> 9497 50 1858</li>
+            </ul>
+          </div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 bg-white">
+      <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div class="flex flex-col items-center justify-between gap-6 sm:flex-row">
+          <div class="flex items-center gap-3">
+            <img src=\"assets/logo.jpg\" alt=\"e-sthiri logo\" class=\"h-8 w-8 rounded-lg object-contain\" />
+            <span class="text-sm font-semibold">e-sthiri</span>
+          </div>
+          <p class="text-center text-xs text-slate-500 sm:text-right">© <span id="year"></span> e-sthiri. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Simple mobile menu toggle
+      const menuBtn = document.getElementById('menuBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      menuBtn?.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+      // Current year
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
